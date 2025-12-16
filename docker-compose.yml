@@ -1,6 +1,22 @@
 version: '3.8'
 
 services:
+  mongodb:
+    image: mongo:7
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: eeu_user
+      MONGO_INITDB_ROOT_PASSWORD: eeu_password
+      MONGO_INITDB_DATABASE: eeu_demand
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   backend:
     build: ./backend
     ports:
@@ -9,6 +25,10 @@ services:
       - ./backend:/app
     environment:
       - PYTHONPATH=/app
+      - MONGODB_URL=mongodb://eeu_user:eeu_password@mongodb:27017/eeu_demand?authSource=admin
+    depends_on:
+      mongodb:
+        condition: service_healthy
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
   frontend:
@@ -21,3 +41,6 @@ services:
     depends_on:
       - backend
     command: npm run dev -- --host
+
+volumes:
+  mongo_data:

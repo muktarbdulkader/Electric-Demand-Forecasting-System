@@ -7,6 +7,12 @@ joblib
 pydantic
 pydantic-settings
 python-multipart
+python-dotenv
+
+# Database
+motor>=3.3.0
+pymongo>=4.6.0
+beanie>=1.24.0
 
 # Optional: Advanced ML (uncomment to enable)
 # tensorflow>=2.10.0

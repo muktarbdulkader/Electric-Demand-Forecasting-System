@@ -17,7 +17,7 @@ class UserLogin(BaseModel):
     password: str
 
 class UserResponse(BaseModel):
-    id: int
+    id: str
     email: str
     full_name: str
     region: str
@@ -31,7 +31,6 @@ class TokenResponse(BaseModel):
 # ============ HOUSEHOLD SCHEMAS ============
 class HouseholdCreate(BaseModel):
     name: str = Field(..., description="Household name")
-    address: str = Field(..., description="Address")
     region: str = Field(..., description="Region")
     num_people: int = Field(..., ge=1, description="Number of people")
     num_rooms: int = Field(..., ge=1, description="Number of rooms")
@@ -41,9 +40,8 @@ class HouseholdCreate(BaseModel):
     appliances: List[str] = Field(default=[], description="List of appliances")
 
 class HouseholdResponse(BaseModel):
-    id: int
+    id: str
     name: str
-    address: str
     region: str
     num_people: int
     num_rooms: int

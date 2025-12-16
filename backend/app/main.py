@@ -4,6 +4,7 @@ Full-stack ML-powered system with authentication and AI insights
 """
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 import sys
 import os
 
@@ -18,11 +19,22 @@ from app.routes.realtime import router as realtime_router
 from app.routes.chatbot import router as chatbot_router
 from app.routes.alerts import router as alerts_router
 from app.routes.reports import router as reports_router
+from app.core.database import init_db, close_db
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Initialize and cleanup database connection"""
+    await init_db()
+    yield
+    await close_db()
+
 
 app = FastAPI(
     title="Ethiopian Electric Utility - Demand Forecasting API",
     description="ML-powered API for predicting electricity demand with AI insights",
-    version="2.0.0"
+    version="2.0.0",
+    lifespan=lifespan
 )
 
 # CORS middleware for frontend integration
