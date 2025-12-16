@@ -19,6 +19,7 @@ from app.routes.realtime import router as realtime_router
 from app.routes.chatbot import router as chatbot_router
 from app.routes.alerts import router as alerts_router
 from app.routes.reports import router as reports_router
+from app.routes.external_data import router as external_router
 from app.core.database import init_db, close_db
 
 
@@ -55,6 +56,7 @@ app.include_router(realtime_router)
 app.include_router(chatbot_router)
 app.include_router(alerts_router)
 app.include_router(reports_router)
+app.include_router(external_router)
 
 @app.get("/")
 async def root():
@@ -74,7 +76,8 @@ async def root():
             "households": ["/households", "/households/analytics/summary"],
             "ai": ["/ai/insights", "/ai/national", "/ai/predict/weekly"],
             "alerts": ["/alerts", "/alerts/summary", "/alerts/config"],
-            "reports": ["/reports/daily", "/reports/weekly", "/reports/export/{format}"]
+            "reports": ["/reports/daily", "/reports/weekly", "/reports/export/{format}"],
+            "external": ["/external/weather/all", "/external/eeu/historical", "/external/api-status"]
         }
     }
 

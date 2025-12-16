@@ -128,7 +128,12 @@ class DemandPredictor:
                 X = np.array([features[:self.n_features]])
                 X_scaled = self.scaler.transform(X)
                 prediction = self.model.predict(X_scaled)[0]
-                return round(max(0, prediction), 2)
+                
+                # If model returns 0 or negative, fall back to pattern-based
+                if prediction > 100:  # Reasonable minimum demand
+                    return round(prediction, 2)
+                else:
+                    print(f"ML model returned {prediction}, using pattern-based")
             except Exception as e:
                 print(f"ML prediction failed: {e}, using pattern-based")
         
@@ -148,7 +153,7 @@ class DemandPredictor:
         if is_holiday:
             demand *= 0.85
         
-        return round(max(0, demand), 2)
+        return round(max(100, demand), 2)  # Minimum 100 MW
     
     def predict_next_24h(self, base_temp: float, start_datetime: datetime = None) -> list:
         """Predict demand for next 24 hours"""

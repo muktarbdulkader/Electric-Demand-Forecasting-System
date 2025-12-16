@@ -52,10 +52,17 @@ def get_predictor(force_reload=False):
     global _predictor
     if _predictor is None or force_reload:
         try:
+            # Force reimport to get fresh module
+            import importlib
+            import ml.predict as predict_module
+            importlib.reload(predict_module)
             from ml.predict import DemandPredictor
             _predictor = DemandPredictor()
+            print(f"✅ Predictor loaded: base_demand={_predictor.base_demand:.0f}MW")
         except Exception as e:
             print(f"Error loading predictor: {e}")
+            import traceback
+            traceback.print_exc()
             _predictor = DataDrivenPredictor()
     return _predictor
 
@@ -409,3 +416,63 @@ async def reset_data():
         return {"message": f"Data reset to backup: {backup_files[0]}"}
     
     return {"message": "No backup found to restore"}
+
+
+@router.get("/debug/predictor")
+async def debug_predictor():
+    """Debug endpoint to check predictor state"""
+    global _predictor
+    
+    predictor = get_predictor()
+    
+    # Test prediction
+    now = datetime.now()
+    test_demand = predictor.predict(
+        temperature=25.0,
+        hour=now.hour,
+        day_of_week=now.weekday(),
+        month=now.month
+    )
+    
+    return {
+        "predictor_type": type(predictor).__name__,
+        "base_demand": getattr(predictor, 'base_demand', 'N/A'),
+        "use_model": getattr(predictor, 'use_model', 'N/A'),
+        "data_patterns": getattr(predictor, 'data_patterns', 'N/A'),
+        "hour_factors_sample": {k: v for k, v in list(getattr(predictor, 'hour_factors', {}).items())[:5]},
+        "test_prediction": {
+            "hour": now.hour,
+            "day_of_week": now.weekday(),
+            "month": now.month,
+            "temperature": 25.0,
+            "predicted_demand": test_demand
+        }
+    }
+
+
+@router.post("/refresh")
+async def refresh_predictor():
+    """Force refresh the predictor after data changes"""
+    global _predictor, _data_cache, _last_data_load
+    
+    _predictor = None
+    _data_cache = None
+    _last_data_load = None
+    
+    predictor = get_predictor(force_reload=True)
+    
+    # Test prediction
+    now = datetime.now()
+    test_demand = predictor.predict(
+        temperature=25.0,
+        hour=now.hour,
+        day_of_week=now.weekday(),
+        month=now.month
+    )
+    
+    return {
+        "message": "Predictor refreshed",
+        "predictor_type": type(predictor).__name__,
+        "base_demand": getattr(predictor, 'base_demand', 'N/A'),
+        "test_prediction": test_demand
+    }

@@ -8,6 +8,7 @@ pydantic
 pydantic-settings
 python-multipart
 python-dotenv
+httpx>=0.25.0
 
 # Database
 motor>=3.3.0

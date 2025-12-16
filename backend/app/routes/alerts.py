@@ -58,6 +58,44 @@ alerts_db: List[Alert] = []
 alert_config = AlertConfig()
 alert_subscriptions = {}
 
+# Initialize with sample alerts for demonstration
+def init_sample_alerts():
+    """Add sample alerts on startup"""
+    if len(alerts_db) == 0:
+        sample_alerts = [
+            Alert(
+                id="ALT-20251216-0001",
+                type=AlertType.PEAK_DEMAND,
+                severity=AlertSeverity.WARNING,
+                title="📈 WARNING: Elevated Evening Demand",
+                message="Evening peak demand reached 4,200 MW at 19:00",
+                recommendation="Monitor closely. Industrial users advised to reduce non-essential loads.",
+                timestamp=datetime.now().replace(hour=19, minute=0).isoformat()
+            ),
+            Alert(
+                id="ALT-20251216-0002",
+                type=AlertType.MAINTENANCE,
+                severity=AlertSeverity.INFO,
+                title="🔧 Scheduled Maintenance: Ashegoda Wind Farm",
+                message="Ashegoda Wind Farm (120 MW) under scheduled maintenance until Dec 18",
+                recommendation="Capacity temporarily reduced. No action required.",
+                timestamp=datetime.now().replace(hour=8, minute=0).isoformat()
+            ),
+            Alert(
+                id="ALT-20251216-0003",
+                type=AlertType.WEATHER,
+                severity=AlertSeverity.INFO,
+                title="🌡️ Weather Advisory: Temperature Drop Expected",
+                message="Temperature expected to drop 5°C tonight, may increase heating demand",
+                recommendation="Prepare additional generation capacity for morning peak.",
+                timestamp=datetime.now().replace(hour=14, minute=30).isoformat()
+            ),
+        ]
+        alerts_db.extend(sample_alerts)
+
+# Initialize sample alerts
+init_sample_alerts()
+
 def generate_alert_id() -> str:
     """Generate unique alert ID"""
     return f"ALT-{datetime.now().strftime('%Y%m%d%H%M%S')}-{len(alerts_db)+1:04d}"

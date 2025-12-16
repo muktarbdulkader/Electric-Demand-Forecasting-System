@@ -9,6 +9,60 @@ import random
 
 router = APIRouter(prefix="/realtime", tags=["realtime"])
 
+# Import alerts module for automatic alert generation
+def get_alerts_module():
+    """Lazy import to avoid circular imports"""
+    try:
+        from app.routes.alerts import alerts_db, check_thresholds, Alert, AlertType, AlertSeverity, generate_alert_id
+        return alerts_db, check_thresholds, Alert, AlertType, AlertSeverity, generate_alert_id
+    except ImportError:
+        return None, None, None, None, None, None
+
+def auto_generate_alert(demand_mw: float, capacity_mw: float = 9000):
+    """Automatically generate alerts based on demand thresholds"""
+    alerts_db, check_thresholds, Alert, AlertType, AlertSeverity, generate_alert_id = get_alerts_module()
+    if alerts_db is None:
+        return
+    
+    utilization = (demand_mw / capacity_mw) * 100
+    
+    # Check if we already have a recent similar alert (within last 5 minutes)
+    now = datetime.now()
+    recent_alerts = [a for a in alerts_db 
+                     if (now - datetime.fromisoformat(a.timestamp)).total_seconds() < 300]
+    
+    # Generate alerts based on thresholds
+    if utilization > 95 and not any(a.severity == AlertSeverity.EMERGENCY for a in recent_alerts):
+        alerts_db.append(Alert(
+            id=generate_alert_id(),
+            type=AlertType.PEAK_DEMAND,
+            severity=AlertSeverity.EMERGENCY,
+            title="🚨 EMERGENCY: Grid at Critical Capacity",
+            message=f"Current demand ({demand_mw:.0f} MW) is at {utilization:.1f}% of capacity",
+            recommendation="Implement immediate load shedding. Activate all emergency reserves.",
+            timestamp=now.isoformat()
+        ))
+    elif utilization > 85 and not any(a.severity == AlertSeverity.CRITICAL for a in recent_alerts):
+        alerts_db.append(Alert(
+            id=generate_alert_id(),
+            type=AlertType.PEAK_DEMAND,
+            severity=AlertSeverity.CRITICAL,
+            title="⚠️ CRITICAL: High Grid Utilization",
+            message=f"Current demand ({demand_mw:.0f} MW) is at {utilization:.1f}% of capacity",
+            recommendation="Prepare load shedding protocols. Alert major industrial consumers.",
+            timestamp=now.isoformat()
+        ))
+    elif utilization > 75 and not any(a.severity == AlertSeverity.WARNING for a in recent_alerts):
+        alerts_db.append(Alert(
+            id=generate_alert_id(),
+            type=AlertType.PEAK_DEMAND,
+            severity=AlertSeverity.WARNING,
+            title="📈 WARNING: Elevated Demand",
+            message=f"Current demand ({demand_mw:.0f} MW) is at {utilization:.1f}% of capacity",
+            recommendation="Monitor closely. Prepare backup generation capacity.",
+            timestamp=now.isoformat()
+        ))
+
 # Ethiopian Power Plants Data
 POWER_PLANTS = {
     "GERD": {"type": "Hydro", "capacity_mw": 5150, "location": "Benishangul-Gumuz", "status": "operational"},
@@ -80,6 +134,9 @@ async def get_grid_status():
     voltage_230kv = 230 + random.uniform(-2, 2)
     voltage_132kv = 132 + random.uniform(-1, 1)
     voltage_66kv = 66 + random.uniform(-0.5, 0.5)
+    
+    # Auto-generate alerts based on current demand
+    auto_generate_alert(current_demand, operational_capacity)
     
     return {
         "timestamp": now.isoformat(),
