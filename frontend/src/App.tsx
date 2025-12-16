@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
+import MobileNav from "./components/MobileNav";
 import Dashboard from "./pages/Dashboard";
 import Forecast from "./pages/Forecast";
 import Analytics from "./pages/Analytics";
@@ -59,6 +60,7 @@ const App: React.FC = () => {
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/households" element={<Households />} />
               <Route path="/ai" element={<AIInsights />} />
+              <Route path="/ai-insights" element={<AIInsights />} />
               <Route path="/realtime" element={<Realtime />} />
               <Route path="/alerts" element={<Alerts />} />
               <Route path="/reports" element={<Reports />} />
@@ -67,6 +69,7 @@ const App: React.FC = () => {
           </main>
         </div>
         <Chatbot />
+        <MobileNav />
       </div>
     </BrowserRouter>
   );

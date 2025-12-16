@@ -1316,16 +1316,361 @@ button.secondary { background: var(--secondary); }
   background: var(--text-muted);
 }
 
-/* Mobile responsive */
-@media (max-width: 768px) {
-  .chatbot-window {
-    width: calc(100vw - 32px);
-    height: 70vh;
-    bottom: 80px;
-    right: 16px;
-  }
+/* ============ MOBILE RESPONSIVE ============ */
 
+/* Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+  :root {
+    --sidebar-width: 200px;
+  }
+  
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .plants-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile (max 768px) */
+@media (max-width: 768px) {
+  :root {
+    --navbar-height: 56px;
+    --sidebar-width: 0px;
+  }
+  
+  /* Navbar Mobile */
+  .navbar {
+    padding: 0 12px;
+  }
+  
+  .navbar-brand .brand-text {
+    display: none;
+  }
+  
+  .navbar-links {
+    display: none;
+  }
+  
+  .navbar-user .user-name,
+  .navbar-user .user-region {
+    display: none;
+  }
+  
+  /* Hide sidebar on mobile */
+  .sidebar {
+    display: none;
+  }
+  
+  /* Main content full width */
+  .main-content {
+    margin-left: 0;
+    padding: 16px;
+  }
+  
+  /* Page titles */
+  .page h1 {
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+  
+  .page h2 {
+    font-size: 18px;
+  }
+  
+  /* Stats grid mobile */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .stat-card {
+    padding: 14px;
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+  
+  .stat-icon {
+    font-size: 24px;
+  }
+  
+  .stat-value {
+    font-size: 20px;
+  }
+  
+  .stat-label {
+    font-size: 12px;
+  }
+  
+  /* Charts mobile */
+  .charts-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .chart-card {
+    padding: 16px;
+  }
+  
+  .chart-container {
+    height: 250px;
+  }
+  
+  /* Forms mobile */
+  .forecast-form,
+  .household-form {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .form-actions button {
+    width: 100%;
+  }
+  
+  /* Result card mobile */
+  .result-card {
+    padding: 20px;
+  }
+  
+  .result-value {
+    font-size: 36px;
+  }
+  
+  /* Analytics mobile */
+  .analytics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .analytics-card {
+    padding: 14px;
+  }
+  
+  .analytics-value {
+    font-size: 24px;
+  }
+  
+  /* Households mobile */
+  .households-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .household-card {
+    padding: 16px;
+  }
+  
+  /* AI Insights mobile */
+  .ai-summary {
+    grid-template-columns: 1fr;
+  }
+  
+  .insights-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .model-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .weekly-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  /* Regions table mobile */
+  .regions-table {
+    overflow-x: auto;
+  }
+  
+  .regions-table table {
+    min-width: 500px;
+  }
+  
+  /* Realtime page mobile */
+  .page.realtime .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .last-update {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .grid-status-banner {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+    padding: 16px;
+  }
+  
+  .voltage-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .voltage-card {
+    padding: 12px;
+  }
+  
+  .voltage-value {
+    font-size: 20px;
+  }
+  
+  .plants-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .info-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Chatbot mobile */
+  .chatbot-button {
+    bottom: 16px;
+    right: 16px;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+  
+  .chatbot-window {
+    width: calc(100vw - 24px);
+    height: 75vh;
+    bottom: 76px;
+    right: 12px;
+    left: 12px;
+  }
+  
   .message-content {
-    max-width: 90%;
+    max-width: 85%;
+  }
+  
+  /* Login mobile */
+  .login-container {
+    margin: 16px;
+    padding: 24px;
+  }
+  
+  .login-header h1 {
+    font-size: 20px;
+  }
+  
+  /* Upload card mobile */
+  .upload-card {
+    padding: 16px;
+  }
+  
+  /* Alerts mobile */
+  .alert-card {
+    padding: 14px !important;
+  }
+  
+  .alert-card > div {
+    flex-direction: column !important;
+    gap: 12px;
+  }
+  
+  .alert-card button {
+    width: 100%;
+  }
+}
+
+/* Small mobile (max 480px) */
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .analytics-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .voltage-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .weekly-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .checkboxes {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .appliances-grid {
+    justify-content: center;
+  }
+  
+  .day-card {
+    padding: 12px;
+  }
+}
+
+/* Mobile Bottom Navigation */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid var(--border);
+  padding: 8px 0;
+  z-index: 100;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+  .mobile-nav {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .mobile-nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 10px;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  
+  .mobile-nav-link .icon {
+    font-size: 20px;
+  }
+  
+  .mobile-nav-link.active {
+    color: var(--primary);
+    background: var(--bg);
+  }
+  
+  /* Adjust main content for bottom nav */
+  .main-content {
+    padding-bottom: 80px;
+  }
+  
+  /* Move chatbot button above bottom nav */
+  .chatbot-button {
+    bottom: 76px;
+  }
+  
+  .chatbot-window {
+    bottom: 136px;
+    height: 60vh;
   }
 }
