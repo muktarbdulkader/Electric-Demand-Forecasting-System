@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+pandas
+numpy
+scikit-learn
+joblib
+pydantic
+pydantic-settings
+python-multipart
+
+# Optional: Advanced ML (uncomment to enable)
+# tensorflow>=2.10.0
+# statsmodels>=0.14.0
+# xgboost>=1.7.0
